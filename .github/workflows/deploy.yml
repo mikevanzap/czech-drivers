@@ -36,7 +36,7 @@ jobs:
             -u "${{ secrets.AZURE_FUNC_USER }}:${{ secrets.AZURE_FUNC_PASS }}" \
             -H "Content-Type: application/zip" \
             --data-binary @api.zip \
-            "https://$AZURE_FUNCTION_NAME.scm.azurewebsites.net/api/zipdeploy"
+            "https://czech-drivers-api-cfeqcadvc0cwfbhk.scm.germanywestcentral-01.azurewebsites.net:443/api/zipdeploy"
         env:
           AZURE_FUNCTION_NAME: "czech-drivers-api"
 
@@ -57,6 +57,6 @@ jobs:
             -u "${{ secrets.AZURE_WEBAPP_USER }}:${{ secrets.AZURE_WEBAPP_PASS }}" \
             -H "Content-Type: application/zip" \
             --data-binary @dash.zip \
-            "https://$AZURE_WEBAPP_NAME.scm.azurewebsites.net/api/zipdeploy"
+            "https://czech-drivers-dashboard-fmdbcfahd4habvh4.scm.polandcentral-01.azurewebsites.net:443/api/zipdeploy"
         env:
           AZURE_WEBAPP_NAME: "czech-drivers-dashboard"
