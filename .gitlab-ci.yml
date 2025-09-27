@@ -1,0 +1,49 @@
+stages:
+  - test
+  - deploy-api
+  - deploy-dashboard
+
+variables:
+  AZURE_FUNCTION_NAME: "czech-drivers-api"     # ← CHANGE TO YOUR NAME
+  AZURE_WEBAPP_NAME: "czech-drivers-dashboard" # ← CHANGE TO YOUR NAME
+  PYTHON_VERSION: "3.11"
+
+test:
+  stage: test
+  image: python:3.11
+  before_script:
+    - pip install -r requirements.txt -r requirements-dashboard.txt pytest
+  script:
+    - pytest tests/
+
+deploy-api:
+  stage: deploy-api
+  image: python:3.11
+  script:
+    - apt-get update && apt-get install -y zip
+    - pip install -r requirements.txt
+    - zip -r api.zip api/ src/ requirements.txt
+    - |
+      curl -X POST \
+        -u "$AZURE_FUNC_USER:$AZURE_FUNC_PASS" \
+        -H "Content-Type: application/zip" \
+        --data-binary @api.zip \
+        "https://$AZURE_FUNCTION_NAME.scm.azurewebsites.net/api/zipdeploy"
+  only:
+    - main
+
+deploy-dashboard:
+  stage: deploy-dashboard
+  image: python:3.11
+  script:
+    - apt-get update && apt-get install -y zip
+    - pip install -r requirements-dashboard.txt
+    - zip -r dash.zip dashboard/ requirements-dashboard.txt
+    - |
+      curl -X POST \
+        -u "$AZURE_WEBAPP_USER:$AZURE_WEBAPP_PASS" \
+        -H "Content-Type: application/zip" \
+        --data-binary @dash.zip \
+        "https://$AZURE_WEBAPP_NAME.scm.azurewebsites.net/api/zipdeploy"
+  only:
+    - main

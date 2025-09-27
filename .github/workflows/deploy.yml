@@ -1,0 +1,62 @@
+name: Deploy to Azure
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt -r requirements-dashboard.txt pytest
+      - name: Run tests
+        run: pytest tests/
+
+  deploy-api:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install zip
+        run: sudo apt-get update && sudo apt-get install -y zip
+      - name: Install deps
+        run: pip install -r requirements.txt
+      - name: Zip API
+        run: zip -r api.zip api/ src/ requirements.txt
+      - name: Deploy to Azure Function
+        run: |
+          curl -X POST \
+            -u "${{ secrets.AZURE_FUNC_USER }}:${{ secrets.AZURE_FUNC_PASS }}" \
+            -H "Content-Type: application/zip" \
+            --data-binary @api.zip \
+            "https://$AZURE_FUNCTION_NAME.scm.azurewebsites.net/api/zipdeploy"
+        env:
+          AZURE_FUNCTION_NAME: "czech-drivers-api"
+
+  deploy-dashboard:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install zip
+        run: sudo apt-get update && sudo apt-get install -y zip
+      - name: Install dashboard deps
+        run: pip install -r requirements-dashboard.txt
+      - name: Zip dashboard
+        run: zip -r dash.zip dashboard/ requirements-dashboard.txt
+      - name: Deploy to Azure App Service
+        run: |
+          curl -X POST \
+            -u "${{ secrets.AZURE_WEBAPP_USER }}:${{ secrets.AZURE_WEBAPP_PASS }}" \
+            -H "Content-Type: application/zip" \
+            --data-binary @dash.zip \
+            "https://$AZURE_WEBAPP_NAME.scm.azurewebsites.net/api/zipdeploy"
+        env:
+          AZURE_WEBAPP_NAME: "czech-drivers-dashboard"
