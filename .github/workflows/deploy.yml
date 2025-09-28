@@ -28,6 +28,8 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y zip
       - name: Install deps
         run: pip install -r requirements.txt
+      - name: fix test
+        run: pip install -e .  
       - name: Zip API
         run: zip -r api.zip api/ src/ requirements.txt
       - name: Deploy to Azure Function
