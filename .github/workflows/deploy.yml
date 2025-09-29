@@ -15,7 +15,6 @@ jobs:
           python-version: '3.11'
       - name: Install dependencies
         run: |
-          npm install -g azure-functions-core-tools@4 --unsafe-perm true
           pip install -r requirements.txt -r requirements-dashboard.txt pytest
       - name: Debug user length
         run: |
@@ -44,6 +43,7 @@ jobs:
         run: zip -r api.zip api/ src/ requirements.txt
       - name: Deploy to Azure Function
         run: |
+           npm install -g azure-functions-core-tools@4 --unsafe-perm true
            func azure functionapp publish czech-drivers-api --python
         env:
            AZURE_FUNCTIONAPP_PUBLISH_PROFILE: ${{ secrets.AZURE_FUNC_PUBLISH_PROFILE }}
