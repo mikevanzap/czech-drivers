@@ -24,27 +24,26 @@ def transform_data(df=None):
 
     # Clean column names (Czech → English-friendly)
     df = df.rename(columns={
-        'rok': 'year',
-        'měsíc': 'month',
-        'stav_cizineckého_prukazu': 'residence_status',
-        'státní_příslušnost': 'country',
-        'počet_bodů': 'points'
+        'stav_k_datu': 'year',
+        'uzemi_txt': 'area',
+        'pocet_bodovanych_ridicu': 'penalty_count',
+        'celkovy_pocet_ridicu': 'drivers_count'
     })
 
     # Handle possible encoding issues (replace non-UTF chars if needed)
     df = df.astype(str).replace('nan', None)
 
     # Convert numeric
-    df['year'] = pd.to_numeric(df['year'], errors='coerce')
-    df['month'] = pd.to_numeric(df['month'], errors='coerce')
-    df['points'] = pd.to_numeric(df['points'], errors='coerce')
+    df['penalty_count'] = pd.to_numeric(df['penalty_count'], errors='coerce')
+    df['drivers_count'] = pd.to_numeric(df['drivers_count'], errors='coerce')
+    #df['points'] = pd.to_numeric(df['points'], errors='coerce')
 
     # Drop invalid rows
-    df = df.dropna(subset=['country', 'points'])
+    df = df.dropna(subset=['area', 'penalty_count'])
 
     # Aggregate: total points by country
-    summary = df.groupby('country')['points'].sum().reset_index()
-    summary = summary.rename(columns={'points': 'total_points'})
+    summary = df.groupby('area')['penalty_count'].sum().reset_index()
+    summary = summary.rename(columns={'penalty_count': 'total_points'})
     summary = summary.sort_values('total_points', ascending=False)
 
     return summary.to_dict(orient='records')

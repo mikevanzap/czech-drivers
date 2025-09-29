@@ -14,10 +14,10 @@ try:
     response.raise_for_status()
     data = response.json()
 
-    if not 
+    if not data:
         st.warning("No data available.")
     else:
-        st.bar_chart(data, x="country", y="total_points")
+        st.bar_chart(data, x="area", y="total_points")
         st.dataframe(data, use_container_width=True)
 
 except Exception as e:
