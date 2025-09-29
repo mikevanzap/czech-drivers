@@ -15,6 +15,7 @@ jobs:
           python-version: '3.11'
       - name: Install dependencies
         run: |
+          npm install -g azure-functions-core-tools@4 --unsafe-perm true
           pip install -r requirements.txt -r requirements-dashboard.txt pytest
       - name: Debug user length
         run: |
