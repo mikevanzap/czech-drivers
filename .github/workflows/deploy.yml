@@ -66,7 +66,6 @@ jobs:
       - name: Deploy to Azure App Service
         run: |
           curl -X POST \  
-            -u " ${AZURE_WEBAPP_USER${{ secrets.AZURE_WEBAPP_PASS }}" \
             -u " ${AZURE_WEBAPP_USER}:${AZURE_WEBAPP_PASS}" \
             -H "Content-Type: application/zip" \
             --data-binary @dash.zip \
