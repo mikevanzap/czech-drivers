@@ -69,7 +69,7 @@ jobs:
             -u "${AZURE_WEBAPP_USER}:${AZURE_WEBAPP_PASS}" \
             -H "Content-Type: application/zip" \
             --data-binary @dash.zip \
-            "https://czech-drivers-dashboard-fmdbcfahd4habvh4.scm.azurewebsites.net/api/zipdeploy" \
+            "https://czech-drivers-dashboard-fmdbcfahd4habvh4.scm.polandcentral-01.azurewebsites.net/api/zipdeploy" \
             -v  # ← verbose mode shows errors
         env:
           AZURE_WEBAPP_NAME: "czech-drivers-dashboard"
