@@ -19,6 +19,8 @@ jobs:
       - name: Debug user length
         run: |
           echo "AZURE_WEBAPP_USER length: ${#AZURE_WEBAPP_USER}"  
+          echo "First 5 chars: ${AZURE_WEBAPP_USER:0:5}"
+          echo "AZURE_FUNC_USER: ${{ secrets.AZURE_FUNC_USER }}"
      # - name: Run tests
         #run: pytest tests/
 
