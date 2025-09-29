@@ -16,6 +16,9 @@ jobs:
       - name: Install dependencies
         run: |
           pip install -r requirements.txt -r requirements-dashboard.txt pytest
+      - name: Debug user length
+        run: |
+          echo "AZURE_WEBAPP_USER length: ${#AZURE_WEBAPP_USER}"  
      # - name: Run tests
         #run: pytest tests/
 
