@@ -63,6 +63,9 @@ jobs:
       - name: Install dashboard deps
         run: |
           cp requirements-dashboard.txt requirements.txt
+          echo "=== requirements.txt content ==="
+          cat requirements.txt
+          echo "================================"
           pip install -r requirements.txt
       - name: Zip dashboard
         run: |
