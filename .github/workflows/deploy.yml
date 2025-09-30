@@ -61,11 +61,12 @@ jobs:
       - name: Install zip
         run: sudo apt-get update && sudo apt-get install -y zip
       - name: Install dashboard deps
-        run: pip install -r requirements-dashboard.txt
+        run: |
+          cp requirements-dashboard.txt requirements.txt
+          pip install -r requirements.txt
       - name: Zip dashboard
         run: |
-            cp requirements-dashboard.txt requirements.txt
-            zip -r dash.zip dashboard/ requirements.txt
+          zip -r dash.zip dashboard/ requirements.txt
       - name: Deploy to Azure App Service
         run: |
           curl -X POST \
