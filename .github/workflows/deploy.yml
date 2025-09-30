@@ -69,6 +69,10 @@ jobs:
           pip install -r requirements.txt
       - name: Zip dashboard
         run: |
+          cp requirements-dashboard.txt requirements.txt
+          echo "=== requirements.txt content ==="
+          cat requirements.txt
+          echo "================================"
           zip -r dash.zip dashboard/ requirements.txt
       - name: Deploy to Azure App Service
         run: |
