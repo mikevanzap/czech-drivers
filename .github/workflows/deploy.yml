@@ -52,7 +52,7 @@ jobs:
             -H "Content-Type: application/zip" \
             --data-binary @api.zip \
             "https://czech-drivers-api-cfeqcadvc0cwfbhk.scm.germanywestcentral-01.azurewebsites.net/api/zipdeploy"
-        
+                    
   deploy-dashboard:
    # needs: test
     runs-on: ubuntu-latest
@@ -63,7 +63,9 @@ jobs:
       - name: Install dashboard deps
         run: pip install -r requirements-dashboard.txt
       - name: Zip dashboard
-        run: zip -r dash.zip dashboard/ requirements-dashboard.txt
+        run: |
+            cp requirements-dashboard.txt requirements.txt
+            zip -r dash.zip dashboard/ requirements.txt
       - name: Deploy to Azure App Service
         run: |
           curl -X POST \
